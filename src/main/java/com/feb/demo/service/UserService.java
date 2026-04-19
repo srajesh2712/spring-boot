@@ -2,9 +2,16 @@ package com.feb.demo.service;
 
 
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.feb.demo.User;
@@ -15,8 +22,10 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserService {
-
+public class UserService implements UserDetailsService {
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 	@Autowired
     private UserRepository userRepository;
 	
@@ -77,5 +86,15 @@ public class UserService {
     public String fallbackRegister(Exception e) {
         return "System is currently busy. Please try again in 10 seconds. (Reason: " + e.getMessage() + ")";
     }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User userObj= this.getUserById(Long.parseLong(username));
+		
+		return org.springframework.security.core.userdetails.User
+	            .withUsername(userObj.getName())
+	            .password("123") // Hardcoded plain text
+	            .authorities(Collections.emptyList())
+	            .build();
+	}
     
 }

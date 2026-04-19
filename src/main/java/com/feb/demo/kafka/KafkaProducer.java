@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component - commenting for local testing without kafka container up 
 public class KafkaProducer {
 	@Autowired
 	private final KafkaTemplate<String, String> kafkaTemplate = null;

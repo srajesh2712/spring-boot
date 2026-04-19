@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.feb.demo.User;
+import com.feb.demo.customannotations.LogExecutionTime;
 import com.feb.demo.kafka.KafkaProducer;
 import com.feb.demo.service.UserService;
 
@@ -28,7 +29,7 @@ public class HelloController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
+	// @Autowired
 	private KafkaProducer kafkaProducer;
 
 	public UserService getUserService() {
@@ -75,6 +76,7 @@ public class HelloController {
 	}
 
 	@GetMapping("/all-users")
+	@LogExecutionTime
 	@RateLimiter(name = "userApiLimiter", fallbackMethod = "rateLimiterFallback")
 	public List<User> all() {
 		return userService.getAllUsers();

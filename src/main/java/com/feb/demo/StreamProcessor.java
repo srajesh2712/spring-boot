@@ -16,12 +16,12 @@ import org.apache.kafka.streams.state.WindowStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component - commenting for local testing without kafka container up 
 public class StreamProcessor {
 
 	@Bean
 	public KStream<String, String> kStream(StreamsBuilder streamBuilder) {
-		KStream<String, String> stream = streamBuilder.stream("test-topic",
+		KStream<String, String> stream = streamBuilder.stream("dbserver1.public.topic",
 				Consumed.with(Serdes.String(), Serdes.String())); // Consume as String/String
 		stream.groupByKey(Grouped.with(Serdes.String(), Serdes.String()))
 
